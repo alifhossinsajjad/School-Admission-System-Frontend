@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import type { ViewType } from './types';
-import { ToastProvider } from './context/ToastContext';
-import { StudentProvider } from './context/StudentContext';
-import { Navbar } from './components/navigation/Navbar';
-import { ClassList } from './features/classes/ClassList';
-import { MyApplications } from './features/holds/MyApplications';
-import { AdminPortal } from './features/admin/AdminPortal';
-import { GraduationCap, Database, Sparkles } from 'lucide-react';
+import type { ViewType } from '@/types';
+import { ToastProvider } from '@/context/ToastContext';
+import { StudentProvider } from '@/context/StudentContext';
+import { Navbar } from '@/components/navigation/Navbar';
+import { ClassList } from '@/features/classes/ClassList';
+import { MyApplications } from '@/features/holds/MyApplications';
+import { AdminPortal } from '@/features/admin/AdminPortal';
+import { GraduationCap, Phone, Mail } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
   // Manual URL hash-based routing for full control, zero reload, and back/forward browser support
@@ -35,7 +35,7 @@ export const AppContent: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-600 selection:text-white">
       {/* Top Navbar */}
       <Navbar currentView={currentView} onViewChange={handleViewChange} />
 
@@ -55,26 +55,48 @@ export const AppContent: React.FC = () => {
         {currentView === 'admin' && <AdminPortal />}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/90 py-8 px-4 sm:px-6 lg:px-8 mt-12 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-indigo-400" />
-            <span className="font-semibold text-slate-300">School Admission System</span>
-            <span>• Concurrency-Safe SaaS Frontend</span>
+      {/* Real-world Professional Educational SaaS Footer */}
+      <footer className="border-t border-slate-200 bg-white py-10 px-4 sm:px-6 lg:px-8 mt-16 text-xs text-slate-500 shadow-xs">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+                <GraduationCap className="w-3.5 h-3.5" />
+              </div>
+              <span className="font-bold text-sm text-slate-900">EduAdmit Systems</span>
+            </div>
+            <p className="text-slate-500">
+              Centralized School Admission & Real-Time Seat Allocation Platform.
+            </p>
+            <p className="text-[11px] text-slate-400">
+              © 2026 EduAdmit Inc. All rights reserved.
+            </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
-              <Database className="w-3 h-3 text-emerald-400" /> PostgreSQL Row Locks
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
-              <Sparkles className="w-3 h-3 text-indigo-400" /> React 19 + Vite + Tailwind v4
-            </span>
+          <div className="flex flex-wrap items-center gap-6 text-xs text-slate-600">
+            <a href="#/classes" onClick={() => handleViewChange('classes')} className="hover:text-indigo-600 transition-colors">
+              Admission Guidelines
+            </a>
+            <span className="text-slate-300">•</span>
+            <a href="#/classes" onClick={() => handleViewChange('classes')} className="hover:text-indigo-600 transition-colors">
+              Seat Quota Policies
+            </a>
+            <span className="text-slate-300">•</span>
+            <a href="#/classes" onClick={() => handleViewChange('classes')} className="hover:text-indigo-600 transition-colors">
+              Terms & Privacy
+            </a>
           </div>
 
-          <div className="text-slate-500">
-            Engineered for <span className="text-slate-400 font-medium">OnnoRokom Projukti Limited</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-slate-600 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200">
+            <div className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-indigo-600" />
+              <span className="font-medium">+880 9612-000000</span>
+            </div>
+            <span className="hidden sm:inline text-slate-300">|</span>
+            <div className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-indigo-600" />
+              <span>admissions@eduadmit.edu</span>
+            </div>
           </div>
         </div>
       </footer>

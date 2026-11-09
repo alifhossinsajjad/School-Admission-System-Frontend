@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import type { SchoolClass } from '../../types';
-import { api } from '../../services/api';
-import { useStudent } from '../../hooks/useStudent';
+import type { SchoolClass } from '@/types';
+import { api } from '@/services/api';
+import { useStudent } from '@/hooks/useStudent';
 import { ClassCard } from './ClassCard';
-import { Button } from '../../components/ui/Button';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   RotateCw,
   Search,
@@ -71,7 +72,7 @@ export const ClassList: React.FC<ClassListProps> = ({
         if (isCurrent) setIsLoading(false);
       });
 
-    // Auto-polling every 6 seconds to show dynamic hold expiry & real-time seat changes
+    // Auto-polling every 6 seconds to update real-time seat numbers
     const interval = setInterval(() => {
       fetchClasses();
       refreshMyHolds();
@@ -115,78 +116,78 @@ export const ClassList: React.FC<ClassListProps> = ({
 
   return (
     <div className="space-y-8">
-      {/* Top Hero / Stats Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      {/* Hero Welcome Banner */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-semibold border border-indigo-500/20">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-200">
               <GraduationCap className="w-3.5 h-3.5" />
-              <span>Real-Time Seat Allocation & Admission Control</span>
+              <span>Academic Admission Portal</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              School Admission Portal
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Apply for Grade Admission
             </h1>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              Explore available classes, inspect real-time seat counts, and reserve your seat instantly.
-              Seats are held for 10 minutes to guarantee complete concurrency safety with no over-allocation.
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Explore available classes and reserve your admission seat in real-time. Once reserved,
+              your seat is held for 10 minutes to allow you to confirm enrollment.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              size="md"
+              size="default"
               onClick={() => fetchClasses(true)}
               isLoading={isRefreshing}
               leftIcon={<RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />}
             >
               Refresh Seats
             </Button>
-            <Button variant="emerald" size="md" onClick={onViewMyApplications}>
+            <Button variant="default" size="default" onClick={onViewMyApplications}>
               My Applications
             </Button>
           </div>
         </div>
 
-        {/* Global Metric Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-8">
-          <div className="bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-              <span>Total Classes</span>
-              <Layers className="w-4 h-4 text-indigo-400" />
+        {/* Metric Overview Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <span>Grade Divisions</span>
+              <Layers className="w-4 h-4 text-indigo-600" />
             </div>
-            <p className="text-2xl font-extrabold text-white mt-2">{classes.length}</p>
-            <p className="text-[11px] text-slate-400 mt-1">Active grade divisions</p>
+            <p className="text-2xl font-extrabold text-slate-900 mt-2">{classes.length}</p>
+            <p className="text-xs text-slate-400 mt-1">Active class sections</p>
           </div>
 
-          <div className="bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-              <span>Available Seats</span>
-              <Armchair className="w-4 h-4 text-indigo-400" />
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+              <span>Open Seats</span>
+              <Armchair className="w-4 h-4 text-indigo-600" />
             </div>
-            <p className="text-2xl font-extrabold text-indigo-300 mt-2">
+            <p className="text-2xl font-extrabold text-indigo-600 mt-2">
               {stats.availableSeats}{' '}
-              <span className="text-xs font-normal text-slate-500">/ {stats.totalSeats}</span>
+              <span className="text-xs font-normal text-slate-400">/ {stats.totalSeats}</span>
             </p>
-            <p className="text-[11px] text-slate-400 mt-1">Ready for application</p>
+            <p className="text-xs text-slate-400 mt-1">Available for application</p>
           </div>
 
-          <div className="bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
               <span>Active Holds</span>
-              <Clock className="w-4 h-4 text-amber-400" />
+              <Clock className="w-4 h-4 text-amber-600" />
             </div>
-            <p className="text-2xl font-extrabold text-amber-400 mt-2">{stats.heldSeats}</p>
-            <p className="text-[11px] text-slate-400 mt-1">10-minute hold window</p>
+            <p className="text-2xl font-extrabold text-amber-600 mt-2">{stats.heldSeats}</p>
+            <p className="text-xs text-slate-400 mt-1">Temporary 10m holds</p>
           </div>
 
-          <div className="bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4">
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
               <span>Confirmed Admissions</span>
-              <CheckCircle className="w-4 h-4 text-emerald-400" />
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
             </div>
-            <p className="text-2xl font-extrabold text-emerald-400 mt-2">{stats.confirmedSeats}</p>
-            <p className="text-[11px] text-slate-400 mt-1">Verified enrollments</p>
+            <p className="text-2xl font-extrabold text-emerald-600 mt-2">{stats.confirmedSeats}</p>
+            <p className="text-xs text-slate-400 mt-1">Officially enrolled</p>
           </div>
         </div>
       </div>
@@ -197,24 +198,24 @@ export const ClassList: React.FC<ClassListProps> = ({
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search class by name (e.g. Class 1, Class 10)..."
+            placeholder="Search grade or class (e.g. Class 1, Class 9)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-xs"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5 pl-1">
+          <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5 pl-1">
             <Filter className="w-3.5 h-3.5" /> Filter:
           </span>
-          <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+          <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
             <button
               onClick={() => setFilterType('all')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'all'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-indigo-600 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               All ({classes.length})
@@ -223,8 +224,8 @@ export const ClassList: React.FC<ClassListProps> = ({
               onClick={() => setFilterType('available')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'available'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-indigo-600 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Available
@@ -233,8 +234,8 @@ export const ClassList: React.FC<ClassListProps> = ({
               onClick={() => setFilterType('full')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'full'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-indigo-600 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Full
@@ -245,15 +246,15 @@ export const ClassList: React.FC<ClassListProps> = ({
 
       {/* Error State */}
       {errorMsg && (
-        <div className="p-5 rounded-2xl bg-rose-950/40 border border-rose-500/40 text-rose-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-sm font-bold text-rose-100">Unable to Fetch Class Data</h4>
-              <p className="text-xs text-rose-300 mt-1">{errorMsg}</p>
+              <h4 className="text-sm font-bold text-rose-900">Unable to Fetch Class Data</h4>
+              <p className="text-xs text-rose-700 mt-0.5">{errorMsg}</p>
             </div>
           </div>
-          <Button variant="danger" size="sm" onClick={() => fetchClasses(true)}>
+          <Button variant="destructive" size="sm" onClick={() => fetchClasses(true)}>
             Try Again
           </Button>
         </div>
@@ -263,20 +264,17 @@ export const ClassList: React.FC<ClassListProps> = ({
       {isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="h-64 rounded-2xl bg-slate-900/60 border border-slate-800/60 animate-pulse p-6 flex flex-col justify-between"
-            >
+            <Card key={i} className="bg-white border-slate-200 animate-pulse p-6 h-64 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="h-4 bg-slate-800 rounded w-1/3" />
-                <div className="h-6 bg-slate-800 rounded w-2/3" />
+                <div className="h-4 bg-slate-200 rounded w-1/3" />
+                <div className="h-6 bg-slate-200 rounded w-2/3" />
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="h-16 bg-slate-800/80 rounded-xl" />
-                <div className="h-16 bg-slate-800/80 rounded-xl" />
+                <div className="h-16 bg-slate-100 rounded-xl" />
+                <div className="h-16 bg-slate-100 rounded-xl" />
               </div>
-              <div className="h-10 bg-slate-800 rounded-xl" />
-            </div>
+              <div className="h-10 bg-slate-200 rounded-xl" />
+            </Card>
           ))}
         </div>
       )}
@@ -297,27 +295,29 @@ export const ClassList: React.FC<ClassListProps> = ({
 
       {/* Empty State */}
       {!isLoading && !errorMsg && filteredClasses.length === 0 && (
-        <div className="text-center py-16 px-4 bg-slate-900/40 border border-slate-800 rounded-3xl">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-800/60 flex items-center justify-center text-slate-400 mb-4">
-            <GraduationCap className="w-7 h-7" />
-          </div>
-          <h3 className="text-lg font-bold text-white">No Classes Found</h3>
-          <p className="text-sm text-slate-400 max-w-sm mx-auto mt-1">
-            {searchQuery
-              ? `No classes matching "${searchQuery}". Try a different keyword.`
-              : 'No admission classes have been created yet. Head over to the Admin Portal to set up new classes.'}
-          </p>
-          {!searchQuery && (
-            <Button
-              variant="primary"
-              size="md"
-              className="mt-5"
-              onClick={onNavigateToAdmin}
-            >
-              Go to Admin Portal
-            </Button>
-          )}
-        </div>
+        <Card className="text-center py-16 px-4 bg-white border-slate-200">
+          <CardContent>
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+              <GraduationCap className="w-7 h-7 text-indigo-600" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900">No Admission Classes Found</h3>
+            <p className="text-sm text-slate-500 max-w-sm mx-auto mt-1">
+              {searchQuery
+                ? `No classes matching "${searchQuery}". Try a different keyword.`
+                : 'No admission classes are currently active. Head over to the Admin Portal to set up new classes.'}
+            </p>
+            {!searchQuery && (
+              <Button
+                variant="default"
+                size="default"
+                className="mt-5"
+                onClick={onNavigateToAdmin}
+              >
+                Go to Admin Portal
+              </Button>
+            )}
+          </CardContent>
+        </Card>
       )}
     </div>
   );
